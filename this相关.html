@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function foo(num) {
+        console.log( "foo: " + num );
+        // 记录 foo 被调用的次数
+        console.log('this.foo.count',this.foo.count)
+        //这个会直接执行函数导致死循环
+        // console.log('this.foo()',this.foo())
+        console.log('this.foo() == this.foo',this.foo)
+    }
+    foo.count=0
+    var i;
+    foo()
+    // for (i=0; i<10; i++) {
+    //     if (i > 5) {
+    //         foo( i );
+    //     }
+    // }
+    //上面可以看到this在函数中的指向，那么下面看看在函数表达式中的指向
+    console.log('====================')
+    var fun2Handle = function fun2(fun2Num) {
+        console.log('这里是fun2',fun2Num)
+        console.log(this)
+    }
+    fun2Handle(2)//这里还是指向window，我个人认为是一因为没有改变作用域的原因，作用域还是在最外层的原因
+
+
+    //下面我想尝试在对象中进行调用
+    console.log('=========22222===============')
+    var num = 2
+    let obj1 = {
+        num:1,
+        fun1:function (num) {
+            console.log('num',num)
+            console.log('this.num',this.num)
+            console.log('this',this)
+        }
+    }
+    obj1.fun1(3)//this直接指向obj1对象了！！！
+
+    console.log('=========3333333==============')
+    //this指向的永远是最后调用函数的地方，所以不应该拘泥于过程
+    function foo3() {
+        console.log( this.a );
+    }
+    var obj2 = {
+        a: 2,
+        foo: foo3
+    };
+    var bar = obj2.foo; // 函数别名！
+    var a = "oops, global"; // a 是全局对象的属性
+    bar(); // "oops, global"
+
+
+</script>
+</body>
+</html>
